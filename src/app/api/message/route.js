@@ -47,7 +47,7 @@ export const POST = async (request) => {
 
   return NextResponse.json({
     ok: true,
-    // messageId,
+    //messageId: ,
     message: "Message has been sent",
   });
 };
@@ -77,7 +77,7 @@ export const DELETE = async (request) => {
       { status: 404 }
     );
   }
-
+  DB.messages = DB.messages.filter((x) => x !== messageId);
   writeDB();
 
   return NextResponse.json({
