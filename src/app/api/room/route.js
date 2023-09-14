@@ -15,7 +15,6 @@ export const GET = async () => {
 
 export const POST = async (request) => {
   const payload = checkToken();
-
   if (payload === null) {
     return NextResponse.json(
       {
@@ -27,24 +26,31 @@ export const POST = async (request) => {
   }
 
   readDB();
-  // if(){
-  //   return NextResponse.json(
-  //     {
-  //       ok: false,
-  //       message: `Room ${"replace this with room name"} already exists`,
-  //     },
-  //     { status: 400 }
-  //   );
-  // }
+  const body = await request.json();
+  const { roomName } = body;
+  const founRoomName = DB.rooms.find((x) => x.roomName === roomName);
+  if (founRoomName) {
+    return NextResponse.json(
+      {
+        ok: false,
+        message: `Room ${body.roomName} already exists`,
+      },
+      { status: 400 }
+    );
+  }
 
   const roomId = nanoid();
 
+  DB.rooms.push({
+    roomId,
+    roomName,
+  });
   //call writeDB after modifying Database
   writeDB();
 
   return NextResponse.json({
     ok: true,
-    //roomId,
-    message: `Room ${"replace this with room name"} has been created`,
+    roomId: body.roomId,
+    message: `Room ${body.roomName} has been created`,
   });
 };

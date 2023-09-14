@@ -46,11 +46,8 @@ export const POST = async (request) => {
 
 export const DELETE = async (request) => {
   const payload = checkToken();
-  role = payload.role;
-  const body = await request.json();
-  const { messageId } = body;
 
-  if (role !== "SUPER_ADMIN") {
+  if (payload.role !== "SUPER_ADMIN" || payload === null) {
     return NextResponse.json(
       {
         ok: false,
@@ -59,22 +56,24 @@ export const DELETE = async (request) => {
       { status: 401 }
     );
   }
-  readDB();
-  const foundId = DB.messageId.findIndex((x) => x.messageId === messageId);
-  if (foundId === -1) {
-    return NextResponse.json(
-      {
-        ok: false,
-        message: "Message is not found",
-      },
-      { status: 404 }
-    );
-  }
 
-  writeDB();
+  // readDB();
 
-  return NextResponse.json({
-    ok: true,
-    message: "Message has been deleted",
-  });
+  // const foundId = DB.messageId.find((x) => x.messageId === messageId);
+  // if (!foundId) {
+  //   return NextResponse.json(
+  //     {
+  //       ok: false,
+  //       message: "Message is not found",
+  //     },
+  //     { status: 404 }
+  //   );
+  // }
+
+  // writeDB();
+
+  // return NextResponse.json({
+  //   ok: true,
+  //   message: "Message has been deleted",
+  // });
 };
