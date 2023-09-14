@@ -15,7 +15,7 @@ export const GET = async () => {
 
 export const POST = async (request) => {
   const payload = checkToken();
-  
+
   if (payload === null) {
     return NextResponse.json(
       {
@@ -27,15 +27,15 @@ export const POST = async (request) => {
   }
 
   readDB();
-  if(){
-    return NextResponse.json(
-      {
-        ok: false,
-        message: `Room ${"replace this with room name"} already exists`,
-      },
-      { status: 400 }
-    );
-  }
+  // if(){
+  //   return NextResponse.json(
+  //     {
+  //       ok: false,
+  //       message: `Room ${"replace this with room name"} already exists`,
+  //     },
+  //     { status: 400 }
+  //   );
+  // }
 
   const roomId = nanoid();
 
