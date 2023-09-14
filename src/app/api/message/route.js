@@ -5,9 +5,9 @@ import { NextResponse } from "next/server";
 
 export const GET = async (request) => {
   readDB();
-
-  const foundId = DB.roomId.findIndex((x) => x.roomId === roomId);
-  if (roomId !== null || foundId !== -1) {
+  const roomId = request.nextUrl.searchParams.get("roomId");
+  const foundId = DB.rooms.find((x) => x.roomId === roomId);
+  if (roomId === null || !foundId) {
     return NextResponse.json(
       {
         ok: false,
@@ -24,17 +24,25 @@ export const GET = async (request) => {
 
 export const POST = async (request) => {
   readDB();
-
-  // return NextResponse.json(
-  //   {
-  //     ok: false,
-  //     message: `Room is not found`,
-  //   },
-  //   { status: 404 }
-  // );
+  const body = await request.json();
+  const { roomId, messageText } = body;
+  const foundId = DB.rooms.find((x) => x.roomId === roomId);
+  if (!foundId) {
+    return NextResponse.json(
+      {
+        ok: false,
+        message: `Room is not found`,
+      },
+      { status: 404 }
+    );
+  }
 
   const messageId = nanoid();
 
+  DB.messages.push({
+    roomId,
+    messageText,
+  });
   writeDB();
 
   return NextResponse.json({
