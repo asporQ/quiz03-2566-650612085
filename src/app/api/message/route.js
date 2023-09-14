@@ -65,23 +65,23 @@ export const DELETE = async (request) => {
     );
   }
 
-  // readDB();
+  readDB();
 
-  // const foundId = DB.messageId.find((x) => x.messageId === messageId);
-  // if (!foundId) {
-  //   return NextResponse.json(
-  //     {
-  //       ok: false,
-  //       message: "Message is not found",
-  //     },
-  //     { status: 404 }
-  //   );
-  // }
+  const foundId = DB.messages.find((x) => x.messageId === messageId);
+  if (!foundId) {
+    return NextResponse.json(
+      {
+        ok: false,
+        message: "Message is not found",
+      },
+      { status: 404 }
+    );
+  }
 
-  // writeDB();
+  writeDB();
 
-  // return NextResponse.json({
-  //   ok: true,
-  //   message: "Message has been deleted",
-  // });
+  return NextResponse.json({
+    ok: true,
+    message: "Message has been deleted",
+  });
 };
